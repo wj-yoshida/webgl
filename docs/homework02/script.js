@@ -95,6 +95,14 @@
         material = new THREE.MeshPhongMaterial(MATERIAL_PARAM);
         materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM_POINT);
 
+
+        //土台
+        geometry = new THREE.CylinderGeometry( 3.5, 3.5, 0.5, 30 );
+        box = new THREE.Mesh( geometry, material );
+        box.rotation.x = THREE.Math.degToRad(90);
+        box.position.z = -0.5;
+        scene.add( box );
+
         // torus
         geometry = new THREE.TorusGeometry(0.9, 0.02, 32, 32);
         torus = new THREE.Mesh(geometry, material);
@@ -130,7 +138,7 @@
             const t =  360/12 * i;
             textMesh[i].position.x = center + radius * Math.sin( t * (Math.PI / 180) ) ;
             textMesh[i].position.y = center + radius * Math.cos( t * (Math.PI / 180) ) ;
-            textMesh[i].position.z = 0;
+            textMesh[i].position.z = 0.05;
           	scene.add(textMesh[i]);
           }
         } );
@@ -156,7 +164,7 @@
             const t =  360/12 * i;
             textMesh[i].position.x = center + radius * Math.sin( t * (Math.PI / 180) ) ;
             textMesh[i].position.y = center + radius * Math.cos( t * (Math.PI / 180) ) ;
-            textMesh[i].position.z = 0;
+            textMesh[i].position.z = 0.05;
             textMesh[i].rotation.z = THREE.Math.degToRad(-t);
           	scene.add(textMesh[i]);
           }
@@ -185,9 +193,8 @@
         scene.add(tick_line);
 
         //針の支柱
-        geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.3, 10 );
-        let cy_material = new THREE.MeshBasicMaterial( {color: 0x383838} );
-        box = new THREE.Mesh( geometry, cy_material );
+        geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.5, 10 );
+        box = new THREE.Mesh( geometry, material );
         box.rotation.x = THREE.Math.degToRad(90);
         box.position.z = 0.5;
         scene.add( box );
