@@ -38,30 +38,38 @@
     let dw_st_time = 0;
     let up_st_time = 0;
     let duration = 40;
-    let POS = { mnt_hand: 0, small_hand: 0, big_hand: 0, pillar: 0.8, pillar_pos: 0 };
-    let NXPOS =  { mnt_hand: 0, small_hand: 0, big_hand: 0, pillar: 0.8, pillar_pos: 0 };
+    let POS = { mnt_hand: 0, small_hand: 0, big_hand: 0, pillar: 0.8, pillar_pos: 0.1 };
+    let NXPOS =  { mnt_hand: 0, small_hand: 0, big_hand: 0, pillar: 0.8, pillar_pos: 0.1 };
     // constant variables
     const RENDERER_PARAM = {
-        clearColor: 0x111111
+        clearColor: 0xd8d8d8
     };
     const MATERIAL_PARAM = {
-        color: 0x383838,
-        specular: 0x444444
+        color: 0x999999,
+        specular: 0x222222
+    };
+    const MATERIAL_RED = {
+        color: 0xdc0017,
+        specular: 0x333333
+    };
+    const MATERIAL_PARAM_TXT = {
+        color: 0x444444,
+        specular: 0x111111
     };
     const MATERIAL_PARAM_POINT = {
-        color: 0x444444,
+        color: 0x777777,
         size: 0.1
     };
     const DIRECTIONAL_LIGHT_PARAM = {
-        color: 0x555555,
-        intensity: 0.8,
-        x: 5.5,
-        y: 0.3,
-        z: 9.0
+        color: 0xcccccc,
+        intensity: 0.9,
+        x: 8.0,
+        y: 8.0,
+        z: 30.0
     };
     const AMBIENT_LIGHT_PARAM = {
-        color: 0x666666,
-        intensity: 0.2
+        color: 0xe6f0f4,
+        intensity: 0.4
     };
 
     // entry point
@@ -92,13 +100,15 @@
 
         // material and geometory
         material = new THREE.MeshPhongMaterial(MATERIAL_PARAM);
+        material_red = new THREE.MeshPhongMaterial(MATERIAL_RED);
+        material_txt = new THREE.MeshPhongMaterial(MATERIAL_PARAM_TXT);
         materialPoint = new THREE.PointsMaterial(MATERIAL_PARAM_POINT);
 
         //土台
-        geometry = new THREE.CylinderGeometry( 3.2, 3.2, 0.5, 30 );
+        geometry = new THREE.CylinderGeometry( 3.2, 3.2, 0.1, 30 );
         box = new THREE.Mesh( geometry, material );
         box.rotation.x = THREE.Math.degToRad(90);
-        box.position.z = -0.5;
+        box.position.z = -0.05;
         box.receiveShadow = true;
         group.add( box );
 
@@ -107,7 +117,7 @@
         torus = new THREE.Mesh(geometry, material);
         torus.position.x = 0.0;
         torus.position.z = 0.0;
-        torus.scale.z = 0.04;
+        torus.scale.z = 0.06;
         group.add(torus);
 
         //文字盤
@@ -134,12 +144,12 @@
             const t =  360/12 * i;
             textMesh[i].position.x = center + radius * Math.sin( t * (Math.PI / 180) ) ;
             textMesh[i].position.y = center + radius * Math.cos( t * (Math.PI / 180) ) ;
-            textMesh[i].position.z = 0.05;
+            textMesh[i].position.z = -0.05;
           	group.add(textMesh[i]);
           }
         } );
         font_loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
-          let radius = 2.7;
+          let radius = 2.77;
           const center = 0;
           for (let i = 1; i < 13; i++) {
             let view_txt = 0;
@@ -160,7 +170,7 @@
             const t =  360/12 * i;
             textMesh[i].position.x = center + radius * Math.sin( t * (Math.PI / 180) ) ;
             textMesh[i].position.y = center + radius * Math.cos( t * (Math.PI / 180) ) ;
-            textMesh[i].position.z = 0.05;
+            textMesh[i].position.z = 0.01;
             textMesh[i].rotation.z = THREE.Math.degToRad(-t);
           	group.add(textMesh[i]);
           }
@@ -169,28 +179,31 @@
         //時計の目盛
         const tick_line_geo = new THREE.Geometry();
         const lineMeshTemp = [];
-        let radius = 1.6;
+        let radius = 2.8;
         const center = 0;
-        const tick_cnt = 24;
+        const tick_cnt = 60;
         for (var i = 0; i < tick_cnt; i++) {
           lineMeshTemp[i] = new THREE.Mesh(
-            new THREE.BoxGeometry(0.03, 0.5, 0.05)
+            new THREE.BoxGeometry(0.02, 0.1, 0.02)
           );
           const t =  360/tick_cnt * i;
           lineMeshTemp[i].position.x = center + radius * Math.sin( t * (Math.PI / 180) ) ;
           lineMeshTemp[i].position.y = center + radius * Math.cos( t * (Math.PI / 180) ) ;
           lineMeshTemp[i].position.z = 0.0;
           lineMeshTemp[i].rotation.z = THREE.Math.degToRad(-t);
-          tick_line_geo.mergeMesh(lineMeshTemp[i]);
+          if(i % 5 !=0){
+            tick_line_geo.mergeMesh(lineMeshTemp[i]);
+          }
+
         }
 
         // メッシュを作成
-        const tick_line = new THREE.Mesh(tick_line_geo, material);
+        const tick_line = new THREE.Mesh(tick_line_geo, material_txt);
         group.add(tick_line);
 
         //針の支柱
-        geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.8, 10 );
-        pillar = new THREE.Mesh( geometry, material );
+        geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.6, 10 );
+        pillar = new THREE.Mesh( geometry, material_txt );
         pillar.rotation.x = THREE.Math.degToRad(90);
         pillar.position.z = 0.5;
         group.add( pillar );
@@ -198,12 +211,12 @@
         //秒針
         mnt_hand = new THREE.Group();
         geometry = new THREE.BoxGeometry(0.06, 2.6, 0.02);
-        box = new THREE.Mesh(geometry, material);
+        box = new THREE.Mesh(geometry, material_red);
         box.position.y = 1.2;
         box.position.z = 0.3;
         mnt_hand.add(box);
         geometry = new THREE.TorusGeometry(0.2, 0.01, 20, 20);
-        box = new THREE.Mesh(geometry, material);
+        box = new THREE.Mesh(geometry, material_red);
         box.position.y = 2.7;
         box.position.z = 0.3;
         box.castShadow = true;
@@ -213,7 +226,7 @@
         //長針
         big_hand = new THREE.Group();
         geometry = new THREE.BoxGeometry(0.2, 1.5, 0.05);
-        box = new THREE.Mesh(geometry, material);
+        box = new THREE.Mesh(geometry, material_txt);
         box.position.y = 0.75;
         box.position.z = 0.2;
         box.castShadow = true;
@@ -223,7 +236,7 @@
         //短針
         small_hand = new THREE.Group();
         geometry = new THREE.BoxGeometry(0.1, 2.0, 0.05);
-        box = new THREE.Mesh(geometry, material);
+        box = new THREE.Mesh(geometry, material_txt);
         box.position.y = 1.0;
         box.position.z = 0.1;
         box.castShadow = true;
@@ -244,19 +257,14 @@
         directionalLight.position.y = DIRECTIONAL_LIGHT_PARAM.y;
         directionalLight.position.z = DIRECTIONAL_LIGHT_PARAM.z;
         directionalLight.castShadow = true;
-        //scene.add(directionalLight);
+        scene.add(directionalLight);
+
         ambientLight = new THREE.AmbientLight(
             AMBIENT_LIGHT_PARAM.color,
             AMBIENT_LIGHT_PARAM.intensity
         );
-        //scene.add(ambientLight);
+        scene.add(ambientLight);
 
-        const spotlight = new THREE.SpotLight(0x555555, 1, 100, Math.PI / 3, 0.8);
-        spotlight.position.y = 5;
-        spotlight.position.z = 8;
-        spotlight.position.x = 5;
-        spotlight.castShadow = true;
-        scene.add(spotlight);
 
         // helper
         axesHelper = new THREE.AxesHelper(5.0);
@@ -299,11 +307,11 @@
         if(dw_st_time > duration){
           dw_st_time = duration;
         }
-        mnt_hand.position.z = easing( dw_st_time, POS.mnt_hand, 1.8, duration);
+        mnt_hand.position.z = easing( dw_st_time, POS.mnt_hand, 1.6, duration);
         small_hand.position.z = easing( dw_st_time, POS.small_hand, 1.2, duration+10);
         big_hand.position.z = easing( dw_st_time, POS.big_hand, 0.6, duration+20);
-        pillar.scale.y = easing( dw_st_time, POS.pillar, 2, duration);
-        pillar.position.z = easing( dw_st_time, POS.pillar_pos, 1, duration);
+        pillar.scale.y = easing( dw_st_time, POS.pillar, 2.5, duration);
+        pillar.position.z = easing( dw_st_time, POS.pillar_pos, 0.9, duration);
       }else {
         up_st_time++;
         if(up_st_time > duration){
