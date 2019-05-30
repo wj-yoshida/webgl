@@ -28,14 +28,14 @@
     let satelliteGroup;
     // constant variables
     const RENDERER_PARAM = {
-        clearColor: 0x111111
+        clearColor: 0x666666
     };
     const MATERIAL_PARAM = {
         color: 0xffffff
     };
     const DIRECTIONAL_LIGHT_PARAM = {
         color: 0x999999,
-        intensity: 0.5,
+        intensity: 0.9,
         x: 1.0,
         y: 1.0,
         z: 1.0
