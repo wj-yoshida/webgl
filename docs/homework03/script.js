@@ -34,15 +34,15 @@
         color: 0xffffff
     };
     const DIRECTIONAL_LIGHT_PARAM = {
-        color: 0xdddddd,
+        color: 0xeeeeee,
         intensity: 0.9,
         x: 1.0,
         y: 1.0,
         z: 1.0
     };
     const AMBIENT_LIGHT_PARAM = {
-        color: 0x555555,
-        intensity: 0.1
+        color: 0xcccccc,
+        intensity: 0.4
     };
 
     // entry point
