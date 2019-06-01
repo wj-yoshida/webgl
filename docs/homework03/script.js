@@ -161,18 +161,18 @@
         let z = sin * 2.75;
         moonSphere.position.set(x, 0.0, -z);
 
-        let sin2 = Math.sin(rad*4);
-        let cos2 = Math.cos(rad*4);
+        let sin2 = Math.sin(rad);
+        let cos2 = Math.cos(rad);
 
         satellite01.rotation.y = rad;
         satellite01.position.x = moonSphere.position.x + cos2 * 1.2;
         satellite01.position.y = moonSphere.position.y + sin2 * 1.2;
         satellite01.position.z = moonSphere.position.z + sin2 * 1.2;
 
-        let sin3 = Math.sin(rad*10);
-        let cos3 = Math.cos(rad*10);
+        let sin3 = Math.sin(rad);
+        let cos3 = Math.cos(rad);
 
-        satellite02.rotation.z = rad * 10;
+        satellite02.rotation.z = rad;
         satellite02.position.x = satellite01.position.x + sin3 * 0.45;
         satellite02.position.y = satellite01.position.y + cos3 * 0.45;
         satellite02.position.z = satellite01.position.z + cos3 * 0.45;
