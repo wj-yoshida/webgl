@@ -33,11 +33,6 @@
     const MATERIAL_PARAM = {
         color: 0xffffff
     };
-    const MATERIAL_PARAM_ALH = {
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.2
-    };
     const DIRECTIONAL_LIGHT_PARAM = {
         color: 0xeeeeee,
         intensity: 0.9,
@@ -81,7 +76,7 @@
     function init(){
         // scene and camera
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 500.0);
+        camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 50.0);
         camera.position.x = 0.0;
         camera.position.y = 3.0;
         camera.position.z = 10.0;
@@ -97,7 +92,7 @@
         // material
         earthMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
         earthMaterial.map = earthTexture;
-        moonMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM_ALH);
+        moonMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
         moonMaterial.map = moonTexture;
         satelliteMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
         satelliteMaterial.map = satelliteTexture;
@@ -109,7 +104,7 @@
         moonSphere = new THREE.Mesh(geometry, moonMaterial);
 
         // move mesh
-        moonSphere.scale.set(0.36, 0.36, 0.36);  // 月を小さくし……
+        moonSphere.scale.set(0.02, 0.02, 0.02);  // 月を小さくし……
         moonSphere.position.set(2.75, 0.0, 0.0); // 月を動かし……
         moonSphere.rotation.y = Math.PI;         // 面をあらかじめ地球に向きにする
         scene.add(moonSphere);
@@ -166,21 +161,15 @@
         let z = sin * 2.75;
         moonSphere.position.set(x, 0.0, -z);
 
-        let sin2 = Math.sin(rad);
-        let cos2 = Math.cos(rad);
-
         satellite01.rotation.y = rad;
-        satellite01.position.x = moonSphere.position.x + cos2 * 1.2;
-        satellite01.position.y = moonSphere.position.y + sin2 * 1.2;
-        satellite01.position.z = moonSphere.position.z + sin2 * 1.2;
-
-        let sin3 = Math.sin(rad);
-        let cos3 = Math.cos(rad);
+        satellite01.position.x = moonSphere.position.x + cos * 1.2;
+        satellite01.position.y = moonSphere.position.y + sin * 1.2;
+        satellite01.position.z = moonSphere.position.z + sin * 1.2;
 
         satellite02.rotation.z = rad;
-        satellite02.position.x = satellite01.position.x + sin3 * 0.45;
-        satellite02.position.y = satellite01.position.y + cos3 * 0.45;
-        satellite02.position.z = satellite01.position.z + cos3 * 0.45;
+        satellite02.position.x = satellite01.position.x + sin * 0.45;
+        satellite02.position.y = satellite01.position.y + cos * 0.45;
+        satellite02.position.z = satellite01.position.z + cos * 0.45;
 
         renderer.render(scene, camera);
     }
