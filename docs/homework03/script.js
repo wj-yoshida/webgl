@@ -33,6 +33,11 @@
     const MATERIAL_PARAM = {
         color: 0xffffff
     };
+    const MATERIAL_PARAM_ALH = {
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.2
+    };
     const DIRECTIONAL_LIGHT_PARAM = {
         color: 0xeeeeee,
         intensity: 0.9,
@@ -92,7 +97,7 @@
         // material
         earthMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
         earthMaterial.map = earthTexture;
-        moonMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
+        moonMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM_ALH);
         moonMaterial.map = moonTexture;
         satelliteMaterial = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
         satelliteMaterial.map = satelliteTexture;
