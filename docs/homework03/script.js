@@ -100,7 +100,7 @@
         // geometry
         geometry = new THREE.SphereGeometry(1.0, 64, 64);
         earthSphere = new THREE.Mesh(geometry, earthMaterial);
-        earthSphere.scale.set(0.2, 0.2, 0.2);
+        earthSphere.scale.set(0.4, 0.4, 0.4);
         scene.add(earthSphere);
         moonSphere = new THREE.Mesh(geometry, moonMaterial);
 
@@ -114,9 +114,9 @@
         satellite01.scale.set(0.6, 0.6, 0.6);
         scene.add(satellite01);
 
-        satellite02 = new THREE.Mesh(geometry, satelliteMaterial);
-        satellite02.scale.set(0.08, 0.08, 0.08);
-        scene.add(satellite02);
+        //satellite02 = new THREE.Mesh(geometry, satelliteMaterial);
+        //satellite02.scale.set(0.08, 0.08, 0.08);
+        //scene.add(satellite02);
 
 
         // lights
@@ -167,10 +167,10 @@
         satellite01.position.y = moonSphere.position.y + sin * 1.2;
         satellite01.position.z = moonSphere.position.z + sin * 1.2;
 
-        satellite02.rotation.z = rad;
-        satellite02.position.x = satellite01.position.x + sin * 0.45;
-        satellite02.position.y = satellite01.position.y + cos * 0.45;
-        satellite02.position.z = satellite01.position.z + cos * 0.45;
+        // satellite02.rotation.z = rad;
+        // satellite02.position.x = satellite01.position.x + sin * 0.45;
+        // satellite02.position.y = satellite01.position.y + cos * 0.45;
+        // satellite02.position.z = satellite01.position.z + cos * 0.45;
 
         renderer.render(scene, camera);
     }
