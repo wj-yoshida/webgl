@@ -81,7 +81,7 @@
     function init(){
         // scene and camera
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 50.0);
+        camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 500.0);
         camera.position.x = 0.0;
         camera.position.y = 3.0;
         camera.position.z = 10.0;
