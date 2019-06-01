@@ -100,7 +100,7 @@
         // geometry
         geometry = new THREE.SphereGeometry(1.0, 64, 64);
         earthSphere = new THREE.Mesh(geometry, earthMaterial);
-        earthSphere.scale.set(0.02, 0.02, 0.02);
+        earthSphere.scale.set(0.2, 0.2, 0.2);
         scene.add(earthSphere);
         moonSphere = new THREE.Mesh(geometry, moonMaterial);
 
