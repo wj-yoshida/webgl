@@ -60,27 +60,28 @@
         // --------------------------------------------------------------------
         // 頂点の座標データ
         let ang = 5;
-        VERT_ARR = vert_dot(ang, 0.6, 0);//角の数、半径, 中心
-
-        position = VERT_ARR;
+        position = [];
+        position = vert_dot(ang, 0.6, 0);//角の数、半径, 中心
+        console.log(position);
+        // 0.8, 0.3, 0.3, 1.0
+        //0.5, 0.5, 0.5, 1.0
         // 頂点の色データ
-        console.log(VERT_ARR.length);
         color = [
-            0.8, 0.8, 0.8, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 1.0, 0.8, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.1, 1.0, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 1.0, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.4, 0.4, 0.4, 1.0,
-            0.8, 0.8, 0.8, 1.0
+            0.5, 0.5, 0.5, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.3, 0.2, 0.9, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.3, 0.2, 0.9, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.3, 0.2, 0.9, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.3, 0.2, 0.9, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.5, 0.5, 0.5, 1.0,
+            0.3, 0.2, 0.9, 1.0
         ];
         // 座標データから頂点バッファを生成
         VBO = [
@@ -126,24 +127,25 @@
         gl3.drawArrays(gl3.gl.TRIANGLES, position.length / 3);
     }
     function vert_dot(angle, radius, center){
-      const _arr = [];
-      const vert_arr = [];
+      let vert_arr = [];
+      let return_arr = [];
       for (var i = 0; i < angle; i++) {
         const t =  360/angle * i;
-        let _x = center + radius * Math.sin( t * (Math.PI / 180) );
-        let _y = center + radius * Math.cos( t * (Math.PI / 180) );
-        _arr.push([_x, _y, 0]);
+        vert_arr.push([center + radius * Math.sin( t * (Math.PI / 180) ), center + radius * Math.cos( t * (Math.PI / 180) ), 0]);
       }
-      for (var i = 0; i < angle; i++) {
-        Array.prototype.push.apply(vert_arr, _arr[i]);
-        if(i+1 < angle){
-          Array.prototype.push.apply(vert_arr, _arr[i+1]);
+      for (var i = 0; i < vert_arr.length; i++) {
+        //console.log("i "+i+" lng:"+vert_arr.length);
+        if((i+1) == vert_arr.length){
+          return_arr = return_arr.concat(vert_arr[i]);
+          return_arr = return_arr.concat(vert_arr[0]);
+          return_arr.push(0,0,0);
         }else{
-          Array.prototype.push.apply(vert_arr, _arr[0]);
+          return_arr = return_arr.concat(vert_arr[i]);
+          return_arr = return_arr.concat(vert_arr[i+1]);
+          return_arr.push(0,0,0);
         }
-        Array.prototype.push.apply(vert_arr, [0, 0, 0]);
+
       }
-      console.log(vert_arr);
-      return vert_arr;
+      return return_arr;
     }
 })();
