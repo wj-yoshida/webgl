@@ -64,7 +64,7 @@
     }, false);
 
     function loadShader(){
-        // glcubic の機能を使ってプログラムを生成
+        // glcubic の機能を使ってプログラムを生成  ***プログラムとは頂点シェーダーとフラグメントシェーダーの紐付けをしてくれるオブジェクト
         prg = gl3.createProgramFromFile(
             './shader/main.vert',
             './shader/main.frag',
@@ -135,6 +135,8 @@
         // 深度テストとカリングを有効化する @@@
         gl.enable(gl.DEPTH_TEST); // 深度テストを有効化
         gl.enable(gl.CULL_FACE);  // カリングを有効化
+        //無効化にするとき
+        //gl.disable(gl.CULL_FACE);
         gl.cullFace(gl.BACK);     // カリング面の設定
 
         // 汎用変数の初期化 @@@
@@ -159,7 +161,7 @@
         // 行列を計算する @@@
         nowTime = (Date.now() - startTime) / 1000;
         mat4.identity(mMatrix);
-        mat4.rotate(mMatrix, nowTime, [0.0, 1.0, 0.0], mMatrix);
+        mat4.rotate(mMatrix, nowTime, [0.0, 1.0, 0.0], mMatrix);//
         mat4.multiply(vpMatrix, mMatrix, mvpMatrix);
         // uniform 変数をシェーダにプッシュ @@@
         prg.pushShader([
@@ -181,4 +183,3 @@
         if(run){requestAnimationFrame(render);}
     }
 })();
-

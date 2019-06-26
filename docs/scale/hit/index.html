@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="box">
+      <div class="siban"></div>
+      <p id="que"></p>
+      <p id="ans"></p>
+      <p id="btn">スタート</p>
+    </div>
+    <script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="scale.js"></script>
+  <style media="screen">
+    body{
+      background-color: #dbdbdb;
+    }
+    .siban{
+      width: 100%;
+      height: 34%;
+      position: relative;
+    }
+    .siban .st{
+      width: 100%;
+      height: 1px;
+      background-color: #ddd;
+      position: absolute;
+      left: 0;
+      z-index: 1;
+    }
+    .siban .fl{
+      width: 1px;
+      height: 100%;
+      background-color: #ddd;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+    }
+    .siban .po{
+      width: auto;
+      height: 100%;
+      background-color: #f9f9f9;
+      position: absolute;
+      top: 0;
+      z-index: 0;
+    }
+    .siban .point{
+      width: 8px;
+      height: 8px;
+      border-radius: 100%;
+      background-color: #666;
+      position: absolute;
+      z-index: 2;
+    }
+    #box{
+      background-color: #fff;
+      border-radius: 20px;
+      position: absolute;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 280px;
+      padding: 30px 20px;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+    }
+    #box p{
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      background-color: #f6f6f6;
+      border-top: 2px #eaeaea solid;
+      padding: 6px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      color: #ccc;
+      min-height: 38px;
+    }
+    #box #btn{
+      border-radius: 10px;
+      background-color: #8394a9;
+      color: #fff;
+      font-weight: 900;
+      border-bottom: 3px solid #5b7392;
+      border-top: none;
+      cursor: pointer;
+    }
+
+  </style>
+
+
+
+
+<table>
+<tr><td>LFO Freq : </td><td><input type="text" size="10" id="lfofreq" value="5"/></td></tr>
+<tr><td>Depth : </td><td><input type="text" size="10" id="depth" value="10"/></td></tr>
+<tr><td>VCO Freq : </td><td><input type="text" size="10" id="vcofreq" value="440"/></td></tr>
+</table>
+<br/>
+<button onclick="Setup2()">Set</button><br/>
+<script type="text/javascript">
+var audioctx = new AudioContext();
+var play = 0;
+var vco = audioctx.createOscillator();
+var lfo = audioctx.createOscillator();
+var depth = audioctx.createGain();
+vco.connect(audioctx.destination);
+lfo.connect(depth);
+depth.connect(vco.frequency); // <== connect to frequency parameter of vco
+const Setup = () => {
+  if(play == 0) {
+    play = 1;
+    vco.start(0);
+    lfo.start(0);
+  }
+  vco.frequency.value = parseFloat(document.getElementById("vcofreq").value);
+  lfo.frequency.value = parseFloat(document.getElementById("lfofreq").value);
+  depth.gain.value = parseFloat(document.getElementById("depth").value);
+}
+
+
+
+var audioContext = new AudioContext();
+const Setup2 = () => {
+coin(audioContext.destination, audioContext.currentTime ,63);
+}
+
+
+</script>
+
+  </body>
+</html>

@@ -58,7 +58,7 @@
             './shader/main.vert',
             './shader/main.frag',
             ['position', 'normal', 'color'],
-            [3, 3, 4],
+            [3, 3, 4], //['position', 'normal', 'color'],のストライド（引数の数）
             ['mvpMatrix'],
             ['matrix4fv'],
             initialize
@@ -83,7 +83,7 @@
         // 座標データから頂点バッファを生成
         VBO = [
             gl3.createVbo(torusData.position),
-            gl3.createVbo(torusData.normal),
+            gl3.createVbo(torusData.normal),//法線は単位ベクトル、向きだけを表したいから
             gl3.createVbo(torusData.color)
         ];
         // インデックスバッファを生成
@@ -126,6 +126,7 @@
         // 時間の経過を得る（Date.now は現在時刻のタイムスタンプをミリ秒で返す）
         nowTime = (Date.now() - startTime) / 1000;
         mat4.identity(mMatrix);
+        //
         mat4.rotate(mMatrix, Math.PI * 0.1, [1.0, 0.0, 0.0], mMatrix); // ちょい手前に傾ける @@@
         mat4.rotate(mMatrix, nowTime * 0.5, [0.0, 1.0, 0.0], mMatrix); // 時間経過で Y 軸回転 @@@
         mat4.multiply(vpMatrix, mMatrix, mvpMatrix);
@@ -140,4 +141,3 @@
         if(run){requestAnimationFrame(render);}
     }
 })();
-

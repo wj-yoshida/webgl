@@ -134,6 +134,7 @@
         pMatrix   = mat4.identity(mat4.create()); // プロジェクション座標変換行列
         vpMatrix  = mat4.identity(mat4.create()); // v と p を掛け合わせたもの
         mvpMatrix = mat4.identity(mat4.create()); // m と v と p の全てを掛け合わせたもの
+        //mat4.identityはglcubicの機能.　行列の単位化をしてる
 
         // - ビュー座標変換行列 -----------------------------------------------
         // glcubic.js では、Mat4.lookAt メソッドでビュー座標変換行列を生成するこ
@@ -203,8 +204,9 @@
         // 第二引数：回転する量（ラジアン単位）
         // 第三引数：回転する際の軸を表すベクトル
         // 戻り値で結果を受けるか、第四引数に与えると行列が更新されます。
-        // ....................................................................
+        // ....................................................................//threeでかくとしたら box.rotate.y += nowTime;
         mat4.rotate(mMatrix, nowTime, [0.0, 1.0, 0.0], mMatrix);
+        //mvpをすべて乗算してmvpマトリクスを作ってる
         mat4.multiply(vpMatrix, mMatrix, mvpMatrix);
         // uniform 変数をシェーダにプッシュ
         prg.pushShader([
@@ -218,4 +220,3 @@
         if(run){requestAnimationFrame(render);}
     }
 })();
-

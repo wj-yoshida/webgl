@@ -121,8 +121,11 @@
         // 時間の経過を得る（Date.now は現在時刻のタイムスタンプをミリ秒で返す）
         nowTime = (Date.now() - startTime) / 1000;
         mat4.identity(mMatrix);
+        //行列は、交換法則が成り立たないのでかける順番を変えてしまうと結果も変わってしまうので注意！！
+        //手前にかたむける　→　y軸回転
         mat4.rotate(mMatrix, Math.PI * 0.1, [1.0, 0.0, 0.0], mMatrix); // ちょい手前に傾ける
         mat4.rotate(mMatrix, nowTime * 0.5, [0.0, 1.0, 0.0], mMatrix); // 時間経過で Y 軸回転
+        //順番的にはコードの記述順と、実際の作用が逆になってることに注意！！（かける順番がすごく順番）
         mat4.multiply(vpMatrix, mMatrix, mvpMatrix);
         // - 法線変換用の行列 -------------------------------------------------
         // 法線は、頂点がどちらを向いているのかを表すベクトルでした。
@@ -147,4 +150,3 @@
         if(run){requestAnimationFrame(render);}
     }
 })();
-

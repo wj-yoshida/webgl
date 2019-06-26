@@ -135,7 +135,8 @@
         canvas.height = canvasHeight = window.innerHeight;
 
         // 更新された幅と高さで WebGL 側のビューも設定する @@@
-        gl3.sceneView(0, 0, canvasWidth, canvasHeight);
+        //viewportを設定するのに、sceneViewメソッドを使っている
+        gl3.sceneView(0, 0, canvasWidth, canvasHeight); //canvasのサイズとwebglで描画したいサイズが同じとは限らないのでリサイズするときは必ずする
         gl3.sceneClear([0.7, 0.7, 0.7, 1.0]);
 
         // カメラ関連の変数を更新
@@ -234,4 +235,3 @@
     }
     // カメラ関連ここまで =================================================
 })();
-

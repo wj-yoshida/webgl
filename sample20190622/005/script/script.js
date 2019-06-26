@@ -128,4 +128,3 @@
         gl3.drawElements(gl3.gl.TRIANGLES, index.length);
     }
 })();
-
