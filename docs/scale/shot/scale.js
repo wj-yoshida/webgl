@@ -17,7 +17,8 @@ const mini_num = [
   [40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64]
 ];
 
-var audioContext = new AudioContext();
+var audioContext = new(window.AudioContext || window.webkitAudioContext);
+
 var _s,_f;
 var mode = 'free';
 var hit_note = "C";
@@ -53,7 +54,9 @@ $(window).load(function(){
         $('#que').text((_s+1)+"弦 "+(_f+1)+"フレット");
         $('#btn').text("答え");
         state = "answer";
-        coin(audioContext.destination, audioContext.currentTime , mini_num[_s][_f+1]);
+        if(audioContext){
+          coin(audioContext.destination, audioContext.currentTime , mini_num[_s][_f+1]);
+        }
       }else if(state == "answer"){
         state = "reset";
         $('#btn').text("正解");
@@ -81,7 +84,9 @@ $(window).load(function(){
   $('.htp').on({
     'click': function() {
         //console.log(ans[$(this).data('y')][$(this).data('x')]);
-        coin(audioContext.destination, audioContext.currentTime , mini_num[$(this).data('y')][$(this).data('x')]);
+        if(audioContext){
+          coin(audioContext.destination, audioContext.currentTime , mini_num[$(this).data('y')][$(this).data('x')]);
+        }
         if(mode == "free"){
           set_mode_free($(this).data('y'),$(this).data('x'));
         }else if(mode == "hit"){
@@ -113,7 +118,6 @@ $(window).load(function(){
 
 })
 
-var delay1;
 
 function coin(destination, playbackTime, mini_num) {
   var t0 = playbackTime;
@@ -124,7 +128,6 @@ function coin(destination, playbackTime, mini_num) {
   var audioContext = destination.context;
   var oscillator   = audioContext.createOscillator();
   var lfo          = audioContext.createOscillator();  // for LFO
-  var delay        = new DelayNode(audioContext);
   var gain         = audioContext.createGain();
 
   oscillator.type = "triangle";
