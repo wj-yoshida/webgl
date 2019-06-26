@@ -36,6 +36,9 @@ $(window).load(function(){
       $('#fingerboard').append("<div class='po' style='left: "+(fl_wh*i)+"px; width: "+fl_wh+"px;'></div>");
       //console.log(i+"フレット "+((fl_wh*i)+Math.floor(fl_wh/2)));
     }
+    if(i==11||i==23){
+      $('#fingerboard').append("<div class='po12' style='left: "+(fl_wh*i)+"px; width: "+fl_wh+"px;'><i  style='left: "+(fl_wh/2)+"px;'></i><i  style='left: "+(fl_wh/2)+"px;'></i></div>");
+    }
     for (var j = 0; j < 6; j++) {
       $('#fingerboard').append("<div class='htp' style='top: "+((fl_he*j) - (fl_he/2))+"px;left: "+(fl_wh*i - fl_wh)+"px; width: "+fl_wh+"px; height: "+fl_he+"px;' data-x='"+i+"' data-y='"+j+"'><i></i></div>");
     }
