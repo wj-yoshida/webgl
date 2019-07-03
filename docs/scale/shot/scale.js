@@ -162,8 +162,9 @@ function set_mode_free(st, fl){
 function set_mode_hit(st, fl){
   if( ans[st][fl] == hit_note ){
     $('#fingerboard .htp').each(function(){
-      if( $(this).data('y') == st &&  $(this).data('x') == fl ){
-        $('#ans').text(hit_note+" あと"+(note_cnt--)+"個");
+      if( $(this).data('y') == st &&  $(this).data('x') == fl && !$(this).hasClass('app') ){
+        note_cnt = note_cnt - 1;
+        $('#ans').text(hit_note+" あと"+note_cnt+"個");
         $(this).addClass("app");
       }
     })
