@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>=^.^=</title>
+<style>
+body {margin: 0;}
+canvas {display: block;}
+</style>
+</head>
+<body>
+
+<button type="button" onclick="action0.reset().play().fadeIn( 0.5 ); action1.fadeOut( 0.5 )">action0</button>
+<button type="button" onclick="action1.reset().play().fadeIn( 0.5 ); action0.fadeOut( 0.5 );">action1</button>
+<!-- reset()してからplay()してるのは次のアニメーションのフレームを０に戻すため  -->
+<script src="./three.min.js"></script>
+<script src="./GLTFLoader.js"></script>
+<script>
+const width  = window.innerWidth;
+const height = window.innerHeight;
+const clock = new THREE.Clock();
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 60, width / height, 0.001, 100 );
+camera.position.set( 0, 1, 3 );
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( width, height );
+renderer.gammaOutput = true;
+renderer.gammaFactor = 2.2;
+document.body.appendChild( renderer.domElement );
+
+scene.add(
+  new THREE.HemisphereLight( 0x443333, 0x332222 ),
+  new THREE.AmbientLight( 0x999999 )
+);
+
+let mixer;
+let action0, action1;
+const loader = new THREE.GLTFLoader();
+loader.load( './model2.glb', ( gltf ) => {
+
+  console.log(gltf.animations);
+
+  mixer = new THREE.AnimationMixer( gltf.scene );
+  action0 = mixer.clipAction( gltf.animations[ 0 ] );
+  action1 = mixer.clipAction( gltf.animations[ 1 ] );
+	scene.add( gltf.scene );
+
+  action0.setLoop( THREE.LoopOnce );
+  action0.clampWhenFinished = true;
+  action1.play();
+
+} );
+
+( function anim () {
+
+  requestAnimationFrame( anim );
+
+  const delta = clock.getDelta();
+
+  if ( !! mixer ) mixer.update( delta );
+  renderer.render( scene, camera );
+
+} )( 0 );
+
+</script>
+
+</body>
+</html>

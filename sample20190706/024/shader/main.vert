@@ -3,7 +3,7 @@ attribute vec3 normal;
 attribute vec4 color;
 uniform mat4 mMatrix;
 uniform mat4 mvpMatrix;
-varying vec3 vPosition;
+varying vec3 vPosition; // モデル座標変換行列後の頂点の位置
 varying vec3 vNormal;
 varying vec4 vColor;
 
@@ -13,4 +13,3 @@ void main(){
     vColor = color;
     gl_Position = mvpMatrix * vec4(position, 1.0);
 }
-

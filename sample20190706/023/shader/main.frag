@@ -3,6 +3,11 @@ uniform bool edge; // エッジフラグ @@@
 varying vec3 vNormal;
 varying vec4 vColor;
 
+//頂点シェーダーとフラグメントシェーダーの両方で同じ名前でかつ、同じデータ型で宣言されているuniform変数はどちらからでも利用可能。*edgeのこと
+//ただし、floatの様な浮遊少数が絡むデータ型は頂点シェーダとフラグメントで指定されている精度修飾子が異なる場合、共有できない！
+//精度修飾子: flagの中, (precision mediump float;の) "mediump"のこと vartだと無条件にhighpになってので無理
+//falgの方は精度修飾子の指定が自由、flagのhighpだとモバイルとかで動かないことがある。
+
 const vec3 light = normalize(vec3(1.0));
 
 void main(){
@@ -23,4 +28,3 @@ void main(){
     }
     gl_FragColor = vColor * vec4(vec3(shade), 1.0);
 }
-

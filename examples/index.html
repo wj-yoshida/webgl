@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>=^.^=</title>
+<style>
+body {margin: 0;}
+canvas {display: block;}
+</style>
+</head>
+<body>
+
+<script src="./three.min.js"></script>
+<script src="./GLTFLoader.js"></script>
+<script>
+const width  = window.innerWidth;
+const height = window.innerHeight;
+const clock = new THREE.Clock();
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 60, width / height, 0.001, 100 );
+camera.position.set( 0, 1, 3 );
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( width, height );
+renderer.gammaOutput = true;
+renderer.gammaFactor = 2.2;
+document.body.appendChild( renderer.domElement );
+
+scene.add(
+  new THREE.HemisphereLight( 0x443333, 0x332222 ),
+  new THREE.AmbientLight( 0x999999 )
+);
+
+let mixer;
+let action;
+const loader = new THREE.GLTFLoader();
+loader.load( './model_3.glb', ( gltf ) => {
+
+  mixer = new THREE.AnimationMixer( gltf.scene );
+  action = mixer.clipAction( gltf.animations[ 0 ] );//アニメーション番号
+	scene.add( gltf.scene );
+
+  action.play();
+
+} );
+
+( function anim () {
+
+  requestAnimationFrame( anim );
+
+  const delta = clock.getDelta();
+
+  if ( !! mixer ) mixer.update( delta );//mixerが存在するときだけ
+  renderer.render( scene, camera );
+
+} )( 0 );
+</script>
+
+</body>
+</html>

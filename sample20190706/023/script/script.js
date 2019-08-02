@@ -109,7 +109,7 @@
         // 深度テストとカリングを有効化する
         gl.enable(gl.DEPTH_TEST); // 深度テストを有効化
         gl.enable(gl.CULL_FACE);  // カリングを有効化
-        gl.cullFace(gl.BACK);     // カリング面の設定
+        gl.cullFace(gl.BACK);     // カリング面の設定 ：描画開始前の状態は裏面を消すことになってる
 
         // 汎用変数の初期化
         run = true;
@@ -168,7 +168,7 @@
         prg.pushShader([
             mvpMatrix,
             normalMatrix,
-            true
+            true //裏面かどうかフラグ
         ]);
         // トーラスを描画する
         prg.setAttribute(torusVBO, torusIBO);
@@ -187,7 +187,7 @@
         prg.pushShader([
             mvpMatrix,
             normalMatrix,
-            false
+            false//裏のやつだよっってシェーダーにおくる
         ]);
         // トーラスを描画する
         prg.setAttribute(torusVBO, torusIBO);
@@ -270,4 +270,3 @@
     }
     // カメラ関連ここまで =================================================
 })();
-

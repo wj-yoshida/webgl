@@ -27,12 +27,18 @@ void main(){
     destColor.rgb += vColor.rgb * 0.2;
 
     // フォグの計算 @@@
+    //二つの座標があるとき、終点 -　始点　をすることで二点間を結ぶベクトル取得でき、それをlengthにいれることで距離がわかる
     float eyeDistance = length(vPosition - eyePosition);
     // 計測した距離からフォグの影響度を示す係数を求める @@@
+    //変数fogには0.0~1.0の範囲の値が代入される
     float fog = clamp((eyeDistance - fogStart) / (fogEnd - fogStart), 0.0, 1.0);
     // フォグの影響を考慮した色を求める @@@
+    //mix関数は線形補完を行うための関数。第一引数が値A、第二引数が値B、第三引数に指定した数値の割合で線形にAとBを補完
+    //例: 第３引数が0.0の場合, 値Aとまったく同じ
+    //例: 第３引数が1.0の場合, 値Bとまったく同じ
+    //第３引数はどっちよりに混ぜ合わせるかの割合
     destColor.rgb = mix(destColor.rgb, fogColor, fog);
+    //ベクトルの線形補完をしたい場合にmixはやくだつ
 
     gl_FragColor = destColor;
 }
-

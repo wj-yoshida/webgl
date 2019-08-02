@@ -56,7 +56,7 @@
 
         // インスタンシングのための拡張機能を有効化する @@@
         ext = gl.getExtension('ANGLE_instanced_arrays');
-        if(ext == null){
+        if(ext == null){//アクセスした端末でその拡張機能が使えるかチェック
             alert('ANGLE_instanced_arrays not supported');
             return;
         }
@@ -142,7 +142,8 @@
         IBO = gl3.createIbo(torusData.index);
 
         // インスタンシングの除数を設定する @@@
-        ext.vertexAttribDivisorANGLE(prg.attL[3], 1);
+        ext.vertexAttribDivisorANGLE(prg.attL[3], 1);//webgl1.0だけ2.0になるとertexAttribDivisorになる？
+        //インスタンシングは日常的に使うものというよりは、同じジオメトリを大量に使いたいというときに検討する
 
         // 行列の初期化
         mMatrix      = mat4.identity(mat4.create());
@@ -289,4 +290,3 @@
     }
     // カメラ関連ここまで =================================================
 })();
-
