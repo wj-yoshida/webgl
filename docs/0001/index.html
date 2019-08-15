@@ -18,7 +18,7 @@
     vec4 mvPosition = modelViewMatrix * vec4(_x, _y, _z, 1.0);
     gl_Position = projectionMatrix * mvPosition;
     vPosition =  vec3(_x, _y, _z);
-    gl_PointSize = pointSize * (3.0 - ( distance(cameraPosition, vec3(_x, _y, _z)) * 0.25) ) * 0.99;
+    gl_PointSize = min(pointSize * (3.0 - ( distance(cameraPosition, vec3(_x, _y, _z)) * 0.25) ) * 0.99, 2.0);
   }
 </script>
 <script id="fragmentShader" type="x-shader/x-fragment">

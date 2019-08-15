@@ -61,7 +61,7 @@ window.addEventListener('load', () => {
   canvasHeight = window.innerHeight;
   targetDOM    = document.getElementById('webgl');
 
-  document.getElementById("webgl").appendChild(stats.domElement);
+  targetDOM.appendChild(stats.domElement);
 
   // scene and camera
   scene = new THREE.Scene();
