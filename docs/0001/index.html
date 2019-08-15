@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+        <script src="../lib/three.js"></script>
+        <!--script src="../lib/OrbitControls.js"></script-->
+<script id="vertexShaderCurve" type="x-shader/x-vertex">
+  uniform float pointSize;
+  uniform float time;
+  float _time = time * 0.1;
+  float _t = cos(_time) * 0.4;
+  varying vec3 vPosition;
+  void main()
+  {
+    float _x = position.x + sin(position.y * 1.1 + ( _time + (_t))) * 0.5;
+    float _y = position.y + sin(position.z * 1.1 + ( _time + (_t))) * 0.5;
+    float _z = sin(position.y * 1.2  + time) * cos(position.x * 1.1 + _time) * 0.4;
+    vec4 mvPosition = modelViewMatrix * vec4(_x, _y, _z, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+    vPosition =  vec3(_x, _y, _z);
+    gl_PointSize = pointSize * (3.0 - ( distance(cameraPosition, vec3(_x, _y, _z)) * 0.25) ) * 0.99;
+  }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+  varying vec3 vPosition;
+   void main() {
+      gl_FragColor = vec4(1.2 + (vPosition.z));
+   }
+</script>
+        <script src="script.js"></script>
+        <style>
+            * {margin: 0; padding: 0;}
+            html, body {
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="webgl"></div>
+    </body>
+</html>

@@ -33,28 +33,47 @@
     let directionalLight;
     let ambientLight;
     let axesHelper;
+    // animation model
+    const clock = new THREE.Clock();
+    let mixer;
+    let baxim;
+
+    // min から max までの乱数(実数)を返す
+    function getRandomArbitary(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // 度からラジアンに変換
+    function deg2rad(deg) {
+      return deg * Math.PI / 180.0;
+    }
     // constant variables
     const RENDERER_PARAM = {
-        clearColor: 0x333333
+        clearColor: 0x1f3441
     };
     const MATERIAL_PARAM = {
-        color: 0x555555,
-        specular: 0x222222
+        color: 0x010609,
+        specular: 0x000000
     };
     const MATERIAL_PARAM_POINT = {
         color: 0x555555,
         size: 0.1
     };
     const DIRECTIONAL_LIGHT_PARAM = {
-        color: 0x999999,
+        color: 0xffffff,
         intensity: 1.0,
         x: 1.0,
         y: 1.0,
         z: 1.0
     };
     const AMBIENT_LIGHT_PARAM = {
-        color: 0x999999,
-        intensity: 0.2
+        color: 0xaa9999,
+        intensity: 0.4
+    };
+    const SCENE_PARAM = {
+        fogColor: 0x1f3441, // フォグの色
+        fogNear: 17.0,       // フォグの掛かり始める距離
+        fogFar: 32.0        // フォグが完全に掛かる距離
     };
 
     // - 初期化セクション -----------------------------------------------------
@@ -74,11 +93,11 @@
 
         // scene and camera
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(50, canvasWidth / canvasHeight, 0.1, 100.0);
+        camera = new THREE.PerspectiveCamera(37, canvasWidth / canvasHeight, 0.1, 100.0);
         camera.position.x = 0.0;
-        camera.position.y = 0.1;
-        camera.position.z = 14.0;
-        camera.lookAt(new THREE.Vector3(0.0, 6.0, 0.0));
+        camera.position.y = 0.06;
+        camera.position.z = 27.0;
+        camera.lookAt(new THREE.Vector3(0.0, 9.0, 0.0));
 
         // renderer
         renderer = new THREE.WebGLRenderer();
@@ -100,29 +119,92 @@
         plane.rotation.x = -Math.PI / 2.0;
         plane.position.set(0.0, 0.0, 0.0);
         group.add(plane);
-        // box
-        geometry = new THREE.BoxGeometry(4.0, 18.0, 6.0);
-        box = new THREE.Mesh(geometry, material);
-        box.position.x = 0.0;
-        box.position.z = 0.0;
-        group.add(box);
 
-        //ランダムにbox生成して適当に置く
-        geometry = new THREE.BoxGeometry(0.3, 1.0, 0.3);
-        for (var i = 0; i < 1000; i++) {
-          box = new THREE.Mesh(geometry, material);
-          box.scale.y = randRange(0.001, 2.0);
-          box.scale.x = randRange(0.001, 0.3);
-          box.scale.z = randRange(0.001, 0.2);
-          box.position.x = randRange(0.0, 20.0) - 10.0;
-          box.position.z = randRange(0.0, 20.0) - 10.0;
-            group2.add(box);
+        var sky_mat = new THREE.SpriteMaterial({
+          map: new THREE.TextureLoader().load("images/sky.jpg")
+        });
+        var sky = new THREE.Sprite(sky_mat);
+        sky.scale.set(30, 30, 1);
+        sky.position.y = 10;
+        sky.position.z = -2;
+        scene.add(sky);
+
+
+
+        // ビルボード相当用のテクスチャ読み込み
+        var texFileList = [
+          "images/tree0.png",
+          "images/tree1.png",
+          "images/tree2.png"
+        ];
+        var texTrees = [];
+        for (var i = 0; i < texFileList.length; i++) {
+          texTrees.push(new THREE.TextureLoader().load(texFileList[i]));
+          texTrees[i].anisotropy = renderer.getMaxAnisotropy();
+        }
+
+        // ビルボード相当を Sprite を使って作成
+
+        var trees = [];
+        var treesScale = [];
+        var r = 20;
+
+        for (var i = 0; i < 800; i++) {
+          var w = getRandomArbitary(0.7, 2);
+          treesScale.push(w);
+
+          var mat = new THREE.SpriteMaterial({
+            map: texTrees[Math.floor(Math.random() * texTrees.length)],
+            transparent: true,
+            fog: true,
+            color: 0xffffff,
+          });
+
+          //var x = getRandomArbitary(-r, r);
+          var x = randRange(0.0, 34.0) - 17;
+          var y = w / 2 ;
+          //var z = getRandomArbitary(-r, r);
+          var z = randRange(0.0, 34.0) - 17;
+
+          var tree = new THREE.Sprite(mat);
+          trees.push(tree);
+
+          tree.position.set(x, y, z);
+          tree.scale.set(w, w, 1);
+
+          // これを入れないと透過部分がおかしくなる
+          tree.renderOrder = 1;
+
+          group2.add(tree);
+
         }
 
 
 
+
+        let action;
+        const loader = new THREE.GLTFLoader();
+        loader.load( './bakixim_3.glb', ( gltf ) => {
+          mixer = new THREE.AnimationMixer( gltf.scene );
+          action = mixer.clipAction( gltf.animations[ 0 ] );//アニメーション番号
+
+        	group.add( gltf.scene );
+          action.play();
+        } );
+
+
+        group.scale.x = 2.0;
+        group.scale.y = 2.0;
+        group.scale.z = 2.0;
         scene.add(group);
         scene.add(group2);
+
+
+        scene.fog = new THREE.Fog(
+            SCENE_PARAM.fogColor,
+            SCENE_PARAM.fogNear,
+            SCENE_PARAM.fogFar
+        );
 
 
         // lights
@@ -139,6 +221,41 @@
             AMBIENT_LIGHT_PARAM.intensity
         );
         scene.add(ambientLight);
+
+
+/*
+        // テクスチャ読み込み
+        var r = "images/";
+        var urls = [
+          r + "posx.jpg",
+          r + "negx.jpg",
+          r + "posy.jpg",
+          r + "negy.jpg",
+          r + "posz.jpg",
+          r + "negz.jpg",
+        ];
+        var texCube = new THREE.CubeTextureLoader().load(urls);
+        texCube.format = THREE.RGBFormat;
+        texCube.mapping = THREE.CubeReflectionMapping;
+
+        // skybox用のマテリアルを生成
+        var cubeShader = THREE.ShaderLib["cube"];
+        var cubeMat = new THREE.ShaderMaterial({
+          fragmentShader: cubeShader.fragmentShader,
+          vertexShader: cubeShader.vertexShader,
+          uniforms: cubeShader.uniforms,
+          depthWrite: false,
+          side: THREE.BackSide,
+        });
+
+        cubeMat.uniforms["tCube"].value = texCube;
+
+        // Skybox用ジオメトリ生成
+        var d = 10000;
+        var cubeGeo = new THREE.BoxGeometry(d, d, d);
+        cubeMesh = new THREE.Mesh(cubeGeo, cubeMat);
+        scene.add(cubeMesh);
+        */
 
         // helper
         //axesHelper = new THREE.AxesHelper(5.0);
@@ -173,6 +290,10 @@
     // ------------------------------------------------------------------------
     // rendering
     function render(){
+        const delta = clock.getDelta();
+
+        if ( !! mixer ) mixer.update( delta );//mixerが存在するときだけ
+
         if(run){requestAnimationFrame(render);}
 
         if(isDown === true){
@@ -185,8 +306,8 @@
             torus.rotation.y  += 0.02;
             torus.rotation.z  += 0.02;
         }
-        group.rotation.y += 0.001;
-        group2.rotation.y += 0.008;
+        group.rotation.y += 0.0005;
+        group2.rotation.y += 0.006;
 
         renderer.render(scene, camera);
     }

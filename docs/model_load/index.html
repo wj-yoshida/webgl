@@ -33,7 +33,7 @@ scene.add(
 
 const loader = new THREE.GLTFLoader();
 //gltfオブジェクトの中にもsceneがあるのでそれを追加してる
-loader.load( './human2.glb', ( gltf ) => {
+loader.load( './model.glb', ( gltf ) => {
 		scene.add( gltf.scene );
 	}
 );
