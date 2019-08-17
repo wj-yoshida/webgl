@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+        <script src="../lib/three.js"></script>
+        <!--script src="../lib/OrbitControls.js"></script-->
+        <script id="vertexShaderCurve" type="x-shader/x-vertex">
+          uniform float pointSize;
+          uniform float time;
+          uniform float tween;
+          float _t;
+          vec3 vPosition;
+          varying vec4 vColor;
+          void main()
+          {
+            float _time =  time * 0.7;
+            _t = cos(_time) * 0.04;
+            float _x = position.x + sin(position.y * 1.1 + ( _time + (_t))) * 0.5;
+            float _y = position.y + sin(position.z * 1.1 + ( _time + (_t))) * 0.5;
+            float _z = sin(position.y * 1.2  + _time) * cos(position.x * 1.2 + _time) * 0.5;
+            vec4 mvPosition = modelViewMatrix * vec4(_x, _y, _z, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            //vPosition =  vec3(_x, _y, _z);
+            gl_PointSize = 9.0 - clamp(distance(cameraPosition, vec3(_x, _y, _z)), 7.9, 9.0);
+            //gl_PointSize = 1.0;
+            vColor = vec4(1.0, 1.0, 1.0 , (1.0 - vPosition.z) * tween);
+          }
+        </script>
+        <script id="fragmentShader" type="x-shader/x-fragment">
+          // /varying vec3 vPosition;
+          varying vec4 vColor;
+           void main() {
+              //float _dis = 8.0 - (vPosition.z  - cameraPosition.z );
+              gl_FragColor = vColor;
+              //gl_FragColor = vec4(1.0);
+           }
+        </script>
+        <script src="script.js"></script>
+
+    </head>
+
+        <div class="wrap">
+          <div id="CanvasContainer">
+
+          </div>
+          <ul>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim01" class="canvas_wrap"></div>
+            </li>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim02" class="canvas_wrap"></div>
+            </li>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim03" class="canvas_wrap"></div>
+            </li>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim04" class="canvas_wrap"></div>
+            </li>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim05" class="canvas_wrap"></div>
+            </li>
+            <li class="list_item">
+              <div class="txt">
+                <h3>タイトルタイトルタイトルタイトル</h3>
+                <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+              </div>
+              <div id="anim06" class="canvas_wrap"></div>
+            </li>
+          </ul>
+        </div>
+        <style media="screen">
+        body{
+          background-color: #f8f8f8;
+        }
+        #CanvasContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .wrap{
+          margin:  200px auto;
+          max-width: 900px;
+          position: relative;
+        }
+          ul{
+            font-size: 0;
+            margin: 0 -1%;
+            padding: 0;
+          }
+          li{
+            width: 48%;
+            display: inline-block;
+            margin: 10px 1% 30px;
+            background-color: #fff;
+            position: relative;
+          }
+          li .txt{
+            position: relative;
+            z-index: 1;
+            padding-left: 20px;
+            padding-top: 20px;
+            padding-bottom: 80px;
+            padding-right: 40%;
+          }
+          li h3{
+            font-size: 18px;
+            margin-bottom: 10px;
+            letter-spacing: 1.6pt;
+          }
+          li p{
+            font-size: 12px;
+            line-height: 1.8;
+          }
+          li .canvas_wrap{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            width: 100%;
+          }
+
+        </style>
+    </body>
+</html>
