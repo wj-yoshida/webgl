@@ -2,10 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
         <script src="../lib/three.js"></script>
-        <!--script src="../lib/OrbitControls.js"></script-->
         <script id="vertexShaderCurve" type="x-shader/x-vertex">
           uniform float pointSize;
           uniform float time;
@@ -22,20 +20,16 @@
             float _z = sin(position.y * 1.2  + _time) * cos(position.x * 1.2 + _time) * 0.5;
             vec4 mvPosition = modelViewMatrix * vec4(_x, _y, _z, 1.0);
             gl_Position = projectionMatrix * mvPosition;
-            //vPosition =  vec3(_x, _y, _z);
-            gl_PointSize = 9.0 - clamp(distance(cameraPosition, vec3(_x, _y, _z)), 7.9, 9.0);
-            //gl_PointSize = 1.0;
-            vColor = vec4(1.0, 1.0, 1.0 , (1.0 - vPosition.z) * tween);
+            vPosition =  vec3(_x, _y, _z);
+            gl_PointSize = 9.0 - clamp(distance(cameraPosition, vec3(_x, _y, _z)), 7.8, 9.0);
+            vColor = vec4( (vPosition.z+1.5),  (vPosition.z+1.5),  (vPosition.z+1.5) , (1.0 - vPosition.z) * tween);
           }
         </script>
         <script id="fragmentShader" type="x-shader/x-fragment">
-          // /varying vec3 vPosition;
-          varying vec4 vColor;
-           void main() {
-              //float _dis = 8.0 - (vPosition.z  - cameraPosition.z );
-              gl_FragColor = vColor;
-              //gl_FragColor = vec4(1.0);
-           }
+varying vec4 vColor;
+void main() {
+  gl_FragColor = vColor;
+}
         </script>
         <script src="script.js"></script>
 

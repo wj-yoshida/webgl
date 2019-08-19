@@ -7,10 +7,9 @@ window.addEventListener('load', () => {
     const rect = $item.getBoundingClientRect()
     const width = rect.width
     const height = rect.height
-    /* canvasの要素を生成 */
+
     canvas = document.createElement('canvas');
 
-    /* gamedivに、新しく作ったgamecanvasを追加 */
     if($item.querySelector('.canvas_wrap')){
       set_canvas($item.querySelector('.canvas_wrap').id, rect);
     }
@@ -30,40 +29,28 @@ function set_canvas(_this, _rect){
       mesh,
       time;
 
-  // variables
   let canvasWidth  = null;
   let canvasHeight = null;
   let targetDOM    = null;
   let run = false;
   let isDown = false;
 
-  let startTime = Date.now();  // ループ開始時間
-  let nowTime = 0.0;     // 現在までの経過時間
-
-  let pointSize = 1.0;  // ポイントサイズ @@@
+  let startTime = Date.now(); // ループ開始時間
+  let nowTime = 0.0;          // 経過時間
+  let pointSize = 1.0;        // ポイントサイズ
   let v_position;       // 頂点座標
   let v_color;          // 頂点カラー
 
-  let controls;
-
   let tween = 0.0;
-  let run_time = 0.0;
-
-  // Stats
-  let stats = new Stats();
-  stats.setMode(0);
-  stats.domElement.style.position = "absolute";
-  stats.domElement.style.left = "0px";
-  stats.domElement.style.top  = "0px";
 
 
   // constant
   const POINT_RESOLUTION = 100; // 頂点を一行に配置する個数
-  const POINT_AREA_WIDTH = 19;   // 頂点を配置するエリアの広さ
+  const POINT_AREA_WIDTH = 20;   // 頂点を配置するエリアの広さ
 
   // constant variables
   const RENDERER_PARAM = {
-      clearColor: 0xcccccc
+      clearColor: 0xe6e6e6
   };
 
   let PARAM_SHADER_MATERIAL = {
@@ -72,20 +59,40 @@ function set_canvas(_this, _rect){
       'pointSize':  { type: 'f', value: pointSize },
       'tween':  { type: 'f', value: 0.0 }
     },
-    vertexShader: document.getElementById('vertexShaderCurve').textContent,
-    fragmentShader: document.getElementById('fragmentShader').textContent,
+    vertexShader: [
+      "uniform float pointSize;",
+      "uniform float time;",
+      "uniform float tween;",
+      "float _t;",
+      "vec3 vPosition;",
+      "varying vec4 vColor;",
+      "void main()",
+      "{",
+        "float _time =  time * 0.7;",
+        "_t = cos(_time) * 0.04;",
+        "float _x = position.x + sin(position.y * 1.1 + ( _time + (_t))) * 0.5;",
+        "float _y = position.y + sin(position.z * 1.1 + ( _time + (_t))) * 0.5;",
+        "float _z = sin(position.y * 1.2  + _time) * cos(position.x * 1.2 + _time) * 0.5;",
+        "vec4 mvPosition = modelViewMatrix * vec4(_x, _y, _z, 1.0);",
+        "gl_Position = projectionMatrix * mvPosition;",
+        "vPosition =  vec3(_x, _y, _z);",
+        "gl_PointSize = 9.0 - clamp(distance(cameraPosition, vec3(_x, _y, _z)), 7.7, 9.0);",
+        "vColor = vec4( (vPosition.z+1.6),  (vPosition.z+1.6),  (vPosition.z+1.6) , (1.0 - vPosition.z) * tween);",
+      "}"
+    ].join( "\n" ),
+    fragmentShader:[
+      "varying vec4 vColor;",
+      "void main() {",
+        "gl_FragColor = vColor;",
+      "}"
+    ].join( "\n" ),
     side: THREE.DoubleSide,
     transparent: true
   }
   // canvas
-  //canvasWidth  = window.innerWidth;
   canvasWidth = _rect.width;
-  //canvasHeight = window.innerHeight;
   canvasHeight = _rect.height;
-  //targetDOM    = document.getElementById("anim01");
   targetDOM    = document.getElementById(_this);
-  //console.log(targetDOM);
-  //targetDOM.appendChild(stats.domElement);
 
   // scene and camera
   scene = new THREE.Scene();
@@ -95,14 +102,11 @@ function set_canvas(_this, _rect){
   camera.position.z = 6.1;
   camera.lookAt(new THREE.Vector3(0.0, 1.0, 0.0));
 
-
   // renderer
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
   renderer.setSize(canvasWidth, canvasHeight);
   targetDOM.appendChild(renderer.domElement);
-  //controls = new THREE.OrbitControls(camera, renderer.domElement);
-
 
   let gl = targetDOM.firstElementChild.getContext("webgl");
   if (!gl) {
@@ -118,17 +122,15 @@ function set_canvas(_this, _rect){
     v_position = [];
     v_color = [];
     (() => {
-        let i, j;                          // 汎用カウンタ変数
-        let x, y;                          // XY の座標格納用
-        let width = POINT_AREA_WIDTH;      // XY 平面の一辺の長さ
-        let half = width / 2.0;            // 一辺の長さの半分（効率化のために先に求めておく）
-        let resolution = POINT_RESOLUTION; // 平面上に配置する点の解像度
-        let offset = width / resolution;   // 頂点間のオフセット量
+        let i, j;
+        let x, y;
+        let width = POINT_AREA_WIDTH;
+        let half = width / 2.0;
+        let resolution = POINT_RESOLUTION;
+        let offset = width / resolution;
         for(i = 0; i < resolution; ++i){
-            // x 座標
             x = -half + offset * i;
             for(j = 0; j < resolution; ++j){
-                // y 座標
                 y = -half + offset * j;
                 v_position.push(x, y, 0.0);
                 v_color.push(1.0, 1.0, 1.0, 1.0);
@@ -183,11 +185,7 @@ function set_canvas(_this, _rect){
           stop_run();
         }
       })
-
     })
-
-
-
 
     render();
   }
@@ -204,31 +202,18 @@ function set_canvas(_this, _rect){
   function render(){
     resizeCanvas(gl.canvas);
     if(run){requestAnimationFrame(render);}
-    //console.log(run);
-    // Stats
-  	//stats.update();
-
-    //material.uniforms.time.value += 0.02;
-    mesh.rotation.z += 0.001;
-  //  console.log(material.uniforms.tween.value);
-
-    //time = performance.now();
+    //mesh.rotation.z += 0.001;
     nowTime = (Date.now() - startTime) / 1000.0;
     material.uniforms.time.value = nowTime;
     renderer.render(scene, camera);
   }
 
   function resizeCanvas(canvas) {
-    // ブラウザがcanvasを表示しているサイズを調べる。
     var displayWidth  = canvas.clientWidth;
     var displayHeight = canvas.clientHeight;
 
-    // canvasの「描画バッファーのサイズ」と「表示サイズ」が異なるかどうか確認する。
     if (canvas.width  != displayWidth ||
         canvas.height != displayHeight) {
-
-      // サイズが違っていたら、描画バッファーのサイズを
-      // 表示サイズと同じサイズに合わせる。
       canvas.width  = displayWidth;
       canvas.height = displayHeight;
     }
