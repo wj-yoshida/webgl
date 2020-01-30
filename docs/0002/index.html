@@ -22,6 +22,7 @@
             gl_Position = projectionMatrix * mvPosition;
             vPosition =  vec3(_x, _y, _z);
             gl_PointSize = 9.0 - clamp(distance(cameraPosition, vec3(_x, _y, _z)), 7.8, 9.0);
+            //gl_PointSize = 1.0;
             vColor = vec4( (vPosition.z+1.5),  (vPosition.z+1.5),  (vPosition.z+1.5) , (1.0 - vPosition.z) * tween);
           }
         </script>
@@ -45,42 +46,42 @@ void main() {
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim01" class="canvas_wrap"></div>
+              <div  class="canvas_wrap"></div>
             </li>
             <li class="list_item">
               <div class="txt">
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim02" class="canvas_wrap"></div>
+              <div class="canvas_wrap"></div>
             </li>
             <li class="list_item">
               <div class="txt">
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim03" class="canvas_wrap"></div>
+              <div class="canvas_wrap"></div>
             </li>
             <li class="list_item">
               <div class="txt">
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim04" class="canvas_wrap"></div>
+              <div class="canvas_wrap"></div>
             </li>
             <li class="list_item">
               <div class="txt">
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim05" class="canvas_wrap"></div>
+              <div class="canvas_wrap"></div>
             </li>
             <li class="list_item">
               <div class="txt">
                 <h3>タイトルタイトルタイトルタイトル</h3>
                 <p>テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
               </div>
-              <div id="anim06" class="canvas_wrap"></div>
+              <div class="canvas_wrap"></div>
             </li>
           </ul>
         </div>

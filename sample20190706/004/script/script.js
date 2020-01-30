@@ -109,7 +109,6 @@
         // もし仮にそのような処理を記述する際は十分に注意しましょう。
         // --------------------------------------------------------------------
         // ドローコール（描画命令）
-        gl3.drawArrays(gl3.gl.TRIANGLES, position.length / 3);
+        gl3.drawArrays(gl3.gl.LINES, position.length / 3);
     }
 })();
-

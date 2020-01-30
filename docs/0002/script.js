@@ -1,6 +1,7 @@
 
 window.addEventListener('load', () => {
   let canvas;
+  let id_cnt = 0;
   const $items = document.querySelectorAll('.list_item');
   $items.forEach(($item, i) => {
     // $itemのサイズを取得
@@ -9,15 +10,16 @@ window.addEventListener('load', () => {
     const height = rect.height
 
     canvas = document.createElement('canvas');
-
+    $item.querySelector('.canvas_wrap').id = "amin0"+id_cnt;
     if($item.querySelector('.canvas_wrap')){
       set_canvas($item.querySelector('.canvas_wrap').id, rect);
     }
+    id_cnt++;
   })
 
 })
 
-//set_canvas(document.getElementById('animcanvas2'));
+
 function set_canvas(_this, _rect){
 
   let scene,

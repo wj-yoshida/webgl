@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="./script.js"></script>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <canvas id="webgl-canvas"></canvas>
+
+        <ul id="gl_list">
+          <li class="menu-item" data-text="Asagao"><h3>Asagao</h3></li>
+          <li class="menu-item" data-text="Sakura"><h3>Sakura</h3></li>
+          <li class="menu-item" data-text="Rindo"><h3>Rindo</h3></li>
+          <li class="menu-item" data-text="Sumire"><h3>Sumire</h3></li>
+        </ul>
+
+        <style media="screen">
+          #gl_list .menu-item{
+            position: relative;
+          }
+          #gl_list .menu-item h3{
+            position: relative;
+            z-index: 0;
+            background-color: #ddd;
+            color: #ddd;
+            width: 100px;
+            margin: auto;
+          }
+          #gl_list .menu-item canvas{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+          }
+        </style>
+    </body>
+</html>
